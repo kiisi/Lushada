@@ -6,13 +6,12 @@ import axios from 'axios'
 import { useAppStateContext } from '../context/AppStateContext'
 const PageSpinner = ({children}) => {
 
-  const [loading, setLoading] = useState(false)
+
+  const [loading, setLoading] = useState(true)
   const { dispatch } = useAppStateContext()
 
   useEffect(() => {
     (async () => {
-
-      setLoading(true)
 
       try {
 
@@ -20,16 +19,14 @@ const PageSpinner = ({children}) => {
 
         dispatch({type: "SET_USER", payload: res.data.payload})
 
-        setLoading(false)
-
       } catch (err) {
         console.log(err)
-        setLoading(false)
       }
+      
+      setLoading(false)
 
     })()
   }, [])
-
 
   return (
     <>

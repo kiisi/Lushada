@@ -33,11 +33,11 @@ const Navbar = () => {
                         {
                             state.user 
                             ?
-                            <span className="material-icons text-primary text-[26px] cursor-pointer"> account_circle </span>
+                            <span className="material-icons text-primary text-[26px] cursor-pointer" onClick={() => openAuthPopUpHandler("profile")}> account_circle </span>
                             : 
                             <>
-                                <span className="material-icons" onClick={() => openAuthPopUpHandler("sign-up")}> app_registration </span>
-                                <span className="material-icons" onClick={() => openAuthPopUpHandler("login")}> login </span>
+                                <span className="material-icons cursor-pointer" onClick={() => openAuthPopUpHandler("sign-up")}> app_registration </span>
+                                <span className="material-icons cursor-pointer" onClick={() => openAuthPopUpHandler("login")}> login </span>
                             </>
                         }
                         <div className="grid place-items-center">
@@ -46,6 +46,7 @@ const Navbar = () => {
                     </div>
                 </div>
             </nav>
+            {authState === "profile" ? <Profile closeAuthPopUpHandler={closeAuthPopUpHandler} /> : null }
             {authState === "login" ? <Login closeAuthPopUpHandler={closeAuthPopUpHandler} openAuthPopUpHandler={openAuthPopUpHandler} dispatch={dispatch} /> : null}
             {authState === "sign-up" ? <Signup closeAuthPopUpHandler={closeAuthPopUpHandler} openAuthPopUpHandler={openAuthPopUpHandler} /> : null}
         </>
@@ -194,6 +195,62 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
                     </fieldset>
                     <span onClick={() => openAuthPopUpHandler("login")} className="cursor-pointer text-primary text-center block pt-2">Already have an account?</span>
                 </form>
+            </section>
+        </main>
+    )
+}
+
+const Profile = ({ closeAuthPopUpHandler }) =>{
+
+    const { state, dispatch } = useAppStateContext()
+    const [loading, setLoading] = useState(false)
+
+    const submit = async () =>{
+
+        setLoading(true)
+
+        try {
+
+            const res = await axios.get(`${base_url_endpoint}/auth/logout`)
+
+            toast.success(res.data.success)
+
+            closeAuthPopUpHandler()
+
+            dispatch({ type: "SET_USER", payload: null })
+            
+        } catch (err) {
+
+            console.log(err)
+
+            if(err.response?.data?.error){
+                toast.error(err.response.data.error)
+            } else if(err.response?.data?.warn){
+                toast.error(err.response.data.warn)
+            }else if(err.code === "ERR_NETWORK"){
+                toast.error(err.message)
+            }
+        } 
+
+        setLoading(false)
+    }
+
+    console.log(state)
+
+    return (
+        <main className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center">
+            <section className="w-full max-w-[400px] rounded-[6px] bg-white p-4 auth-popup-animation">
+                <header>
+                    <div className="flex justify-end">
+                        <span className="material-icons text-primary cursor-pointer" onClick={closeAuthPopUpHandler}> close </span>
+                    </div>
+                    <h1 className="text-primary text-[30px] font-semibold text-center">Profile</h1>
+                </header>
+                <div className="flex flex-col gap-y-4 pt-5">
+                    <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> badge </span> {state.user.name}</p>
+                    <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> email </span> {state.user.email}</p>
+                    <Button className="w-full" onClick={submit} loading={loading}>Logout</Button>
+                </div>
             </section>
         </main>
     )

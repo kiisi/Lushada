@@ -127,11 +127,13 @@ const CartItem = () => {
                 <Button onClick={() => removeFromCartHandler(rm.id)} className="!px-3">
                   <span className="material-icons"> delete </span>
                 </Button>
-                <PaystackButton {...componentProps}
+                {
+                  state.user && <PaystackButton {...componentProps}
                   className="h-[42px] grid place-items-center px-6 bg-primary text-white rounded-[6px]"
                   text="Book Now"
                   amount={(rm.price + rm.vat) * 100}
                 />
+                }
               </div>
             </div>
           </div>
