@@ -4,10 +4,10 @@ import { rooms } from '../utils/data'
 
 const AppStateContext = createContext(null)
 
-const initialState = localStorage.getItem("app-state") ? JSON.parse(localStorage.getItem("app-state")) : {
-    rooms: rooms,
-    allRooms: rooms,
-    cart: [],
+const initialState = {
+    rooms: localStorage.getItem("rooms") ? JSON.parse(localStorage.getItem("rooms")) : rooms,
+    allRooms: localStorage.getItem("allRooms") ? JSON.parse(localStorage.getItem("allRooms")) : rooms,
+    cart: localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [],
     user: null,
 }
 
@@ -69,7 +69,9 @@ export const AppStateProvider = ({children}) =>{
 
     useEffect(() => {
         // Save the state to local storage whenever it changes
-        localStorage.setItem('app-state', JSON.stringify(state));
+        localStorage.setItem('rooms', JSON.stringify(state.rooms));
+        localStorage.setItem('allRooms', JSON.stringify(state.allRooms));
+        localStorage.setItem('cart', JSON.stringify(state.cart));
       }, [state]);
 
     return (

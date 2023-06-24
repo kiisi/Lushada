@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom'
 import Button from '../components/Button'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useAppStateContext } from '../context/AppStateContext'
 import Input from '../components/Input'
 import { base_url_endpoint } from '../utils/endpoints'
@@ -31,14 +31,14 @@ const Navbar = () => {
                     </div>
                     <div className="flex gap-x-4 items-center">
                         {
-                            state.user 
-                            ?
-                            <span className="material-icons text-primary text-[26px] cursor-pointer" onClick={() => openAuthPopUpHandler("profile")}> account_circle </span>
-                            : 
-                            <>
-                                <span className="material-icons cursor-pointer" onClick={() => openAuthPopUpHandler("sign-up")}> app_registration </span>
-                                <span className="material-icons cursor-pointer" onClick={() => openAuthPopUpHandler("login")}> login </span>
-                            </>
+                            state.user
+                                ?
+                                <span className="material-icons text-primary text-[26px] cursor-pointer" onClick={() => openAuthPopUpHandler("profile")}> account_circle </span>
+                                :
+                                <>
+                                    <span className="material-icons cursor-pointer" onClick={() => openAuthPopUpHandler("sign-up")}> app_registration </span>
+                                    <span className="material-icons cursor-pointer" onClick={() => openAuthPopUpHandler("login")}> login </span>
+                                </>
                         }
                         <div className="grid place-items-center">
                             <Link to="/cart" className="cursor-pointer text-primary relative h-[25px] w-[25px]"><span className="material-icons text-[26px]"> shopping_cart </span><span className="notification-badge">{state.cart.length}</span></Link>
@@ -46,7 +46,7 @@ const Navbar = () => {
                     </div>
                 </div>
             </nav>
-            {authState === "profile" ? <Profile closeAuthPopUpHandler={closeAuthPopUpHandler} /> : null }
+            {authState === "profile" ? <Profile closeAuthPopUpHandler={closeAuthPopUpHandler} /> : null}
             {authState === "login" ? <Login closeAuthPopUpHandler={closeAuthPopUpHandler} openAuthPopUpHandler={openAuthPopUpHandler} dispatch={dispatch} /> : null}
             {authState === "sign-up" ? <Signup closeAuthPopUpHandler={closeAuthPopUpHandler} openAuthPopUpHandler={openAuthPopUpHandler} /> : null}
         </>
@@ -61,7 +61,16 @@ const Login = ({ closeAuthPopUpHandler, openAuthPopUpHandler, dispatch }) => {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
-    async function submit (e) {
+    const popupRef = useRef()
+
+    useEffect(()=>{
+        popupRef.current.focus()
+        document.querySelector("body").classList.add("no-scroll")
+
+        return () => document.querySelector("body").classList.remove("no-scroll")
+    },[])
+
+    async function submit(e) {
 
         e.preventDefault()
 
@@ -79,25 +88,25 @@ const Login = ({ closeAuthPopUpHandler, openAuthPopUpHandler, dispatch }) => {
 
             closeAuthPopUpHandler()
 
-            dispatch({type: "SET_USER", payload: res.data.payload})
+            dispatch({ type: "SET_USER", payload: res.data.payload })
 
         } catch (err) {
-            
+
             setLoading(false)
 
-            if(err.response?.data?.error){
+            if (err.response?.data?.error) {
                 toast.error(err.response.data.error)
-            } else if(err.response?.data?.warn){
+            } else if (err.response?.data?.warn) {
                 toast.error(err.response.data.warn)
-            }else if(err.code === "ERR_NETWORK"){
+            } else if (err.code === "ERR_NETWORK") {
                 toast.error(err.message)
             }
             console.log(err)
-        } 
+        }
     }
 
     return (
-        <main className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center">
+        <main ref={popupRef} className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center overflow-y-auto py-8 px-3 inset-0">
             <section className="w-full max-w-[400px] rounded-[6px] bg-white p-4 auth-popup-animation">
                 <header>
                     <div className="flex justify-end">
@@ -132,7 +141,16 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
-    async function submit (e) {
+    const popupRef = useRef()
+
+    useEffect(()=>{
+        popupRef.current.focus()
+        document.querySelector("body").classList.add("no-scroll")
+
+        return () => document.querySelector("body").classList.remove("no-scroll")
+    },[])
+
+    async function submit(e) {
 
         e.preventDefault()
 
@@ -151,25 +169,25 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
             dispatch({ type: "SET_USER", payload: res.data.payload })
 
             openAuthPopUpHandler("login")
-            
+
         } catch (err) {
-            
+
             setLoading(false)
 
             console.log(err)
 
-            if(err.response?.data?.error){
+            if (err.response?.data?.error) {
                 toast.error(err.response.data.error)
-            } else if(err.response?.data?.warn){
+            } else if (err.response?.data?.warn) {
                 toast.error(err.response.data.warn)
-            }else if(err.code === "ERR_NETWORK"){
+            } else if (err.code === "ERR_NETWORK") {
                 toast.error(err.message)
             }
-        } 
+        }
     }
 
     return (
-        <main className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center">
+        <main ref={popupRef} tabIndex="-1" className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center overflow-y-auto py-8 px-3 inset-0">
             <section className="w-full max-w-[400px] rounded-[6px] bg-white p-4 auth-popup-animation">
                 <header>
                     <div className="flex justify-end">
@@ -182,13 +200,28 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
                         <Input label="Name" type="text" placeholder="Your name" value={name} onChange={(e) => setName(e.target.value)} />
                     </fieldset>
                     <fieldset className="pt-5">
-                        <Input label="Email" type="email" placeholder="example@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)}/>
+                        <Input label="Email" type="email" placeholder="example@gmail.com" value={email} onChange={(e) => setEmail(e.target.value)} />
                     </fieldset>
                     <fieldset className="pt-5">
                         <Input label="Password" type="password" placeholder="*********" value={password} onChange={(e) => setPassword(e.target.value)} />
                     </fieldset>
                     <fieldset className="pt-5">
                         <Input label="Confirm Password" type="password" placeholder="*********" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
+                    </fieldset>
+                    <fieldset className="pt-5">
+                        <h1>Gender:</h1>
+                        <div className="flex gap-x-5 pt-2">
+                            <label htmlFor="radio-male" className="flex gap-x-2 items-center cursor-pointer">
+                                <input type="radio" name="radio" id="radio-male" className="radio-gender hidden" />
+                                <span className="h-[26px] w-[26px] border-2 border-primary p-[4px] bg-[#fff] block rounded-[50%] radio-btn"></span>
+                                <span>Male</span>
+                            </label>
+                            <label htmlFor="radio-female" className="flex gap-x-2 items-center cursor-pointer">
+                                <input type="radio" name="radio" id="radio-female" className="radio-gender hidden" />
+                                <span className="h-[26px] w-[26px] border-2 border-primary p-[4px] bg-[#fff] block rounded-[50%] radio-btn"></span>
+                                <span>Female</span>
+                            </label>
+                        </div>
                     </fieldset>
                     <fieldset className="pt-5">
                         <Button className="w-full" onClick={submit} loading={loading}>Submit</Button>
@@ -200,12 +233,21 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
     )
 }
 
-const Profile = ({ closeAuthPopUpHandler }) =>{
+const Profile = ({ closeAuthPopUpHandler }) => {
 
     const { state, dispatch } = useAppStateContext()
     const [loading, setLoading] = useState(false)
 
-    const submit = async () =>{
+    const popupRef = useRef()
+
+    useEffect(()=>{
+        popupRef.current.focus()
+        document.querySelector("body").classList.add("no-scroll")
+
+        return () => document.querySelector("body").classList.remove("no-scroll")
+    },[])
+
+    const submit = async () => {
 
         setLoading(true)
 
@@ -218,19 +260,19 @@ const Profile = ({ closeAuthPopUpHandler }) =>{
             closeAuthPopUpHandler()
 
             dispatch({ type: "SET_USER", payload: null })
-            
+
         } catch (err) {
 
             console.log(err)
 
-            if(err.response?.data?.error){
+            if (err.response?.data?.error) {
                 toast.error(err.response.data.error)
-            } else if(err.response?.data?.warn){
+            } else if (err.response?.data?.warn) {
                 toast.error(err.response.data.warn)
-            }else if(err.code === "ERR_NETWORK"){
+            } else if (err.code === "ERR_NETWORK") {
                 toast.error(err.message)
             }
-        } 
+        }
 
         setLoading(false)
     }
@@ -238,7 +280,7 @@ const Profile = ({ closeAuthPopUpHandler }) =>{
     console.log(state)
 
     return (
-        <main className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center">
+        <main ref={popupRef} className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center overflow-y-auto py-8 px-3 inset-0">
             <section className="w-full max-w-[400px] rounded-[6px] bg-white p-4 auth-popup-animation">
                 <header>
                     <div className="flex justify-end">
@@ -249,6 +291,7 @@ const Profile = ({ closeAuthPopUpHandler }) =>{
                 <div className="flex flex-col gap-y-4 pt-5">
                     <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> badge </span> {state.user.name}</p>
                     <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> email </span> {state.user.email}</p>
+                    <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> accessibility_new </span> Male</p>
                     <Button className="w-full" onClick={submit} loading={loading}>Logout</Button>
                 </div>
             </section>
