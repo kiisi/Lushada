@@ -139,7 +139,9 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
+    const [gender, setGender] = useState(null)
     const [loading, setLoading] = useState(false)
+    console.log(gender)
 
     const popupRef = useRef()
 
@@ -158,7 +160,7 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
 
         try {
 
-            const res = await axios.post(`${base_url_endpoint}/auth/signup`, { name, email, password, confirm_password: confirmPassword })
+            const res = await axios.post(`${base_url_endpoint}/auth/signup`, { name, email, password, confirm_password: confirmPassword, gender })
 
             console.log(res)
 
@@ -212,12 +214,12 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
                         <h1>Gender:</h1>
                         <div className="flex gap-x-5 pt-2">
                             <label htmlFor="radio-male" className="flex gap-x-2 items-center cursor-pointer">
-                                <input type="radio" name="radio" id="radio-male" className="radio-gender hidden" />
+                                <input type="radio" name="radio" onClick={(e) => setGender(e.target.id === "radio-male" ? "male" : null)} id="radio-male" className="radio-gender hidden" />
                                 <span className="h-[26px] w-[26px] border-2 border-primary p-[4px] bg-[#fff] block rounded-[50%] radio-btn"></span>
                                 <span>Male</span>
                             </label>
                             <label htmlFor="radio-female" className="flex gap-x-2 items-center cursor-pointer">
-                                <input type="radio" name="radio" id="radio-female" className="radio-gender hidden" />
+                                <input type="radio" name="radio" onClick={(e) => setGender(e.target.id === "radio-female" ? "female" : null)} id="radio-female" className="radio-gender hidden" />
                                 <span className="h-[26px] w-[26px] border-2 border-primary p-[4px] bg-[#fff] block rounded-[50%] radio-btn"></span>
                                 <span>Female</span>
                             </label>
@@ -291,7 +293,7 @@ const Profile = ({ closeAuthPopUpHandler }) => {
                 <div className="flex flex-col gap-y-4 pt-5">
                     <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> badge </span> {state.user.name}</p>
                     <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> email </span> {state.user.email}</p>
-                    <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> accessibility_new </span> Male</p>
+                    <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> accessibility_new </span> {state.user.gender}</p>
                     <Button className="w-full" onClick={submit} loading={loading}>Logout</Button>
                 </div>
             </section>
