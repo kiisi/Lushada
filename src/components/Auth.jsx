@@ -6,7 +6,7 @@ import axios from 'axios'
 import { useAppStateContext } from '../context/AppStateContext'
 const PageSpinner = ({children}) => {
 
-  const [loading, setLoading] = useState()
+  const [loading, setLoading] = useState(false)
   const { dispatch } = useAppStateContext()
 
   useEffect(() => {
@@ -17,8 +17,6 @@ const PageSpinner = ({children}) => {
       try {
 
         const res = await axios.get(`${base_url_endpoint}/auth/verify-user`)
-
-        console.log(res)
 
         dispatch({type: "SET_USER", payload: res.data.payload})
 

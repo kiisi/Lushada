@@ -4,11 +4,27 @@ import Navbar from '../layout/Navbar'
 import { useAppStateContext } from '../context/AppStateContext'
 import star from '../assets/star.jpg'
 import { toast } from 'react-toastify'
+import { Helmet } from 'react-helmet'
+import hero_bg from '../assets/hero-img.jpg'
+import bedroom_bg from '../assets/bedroom-img.jpg'
 
 const Home = () => {
 
+    const { state } = useAppStateContext()
+
     return (
         <>
+            <Helmet>
+                <title>Lushada</title>
+                <link rel="preload" href={hero_bg} as="image" />
+                <link rel="preload" href={bedroom_bg} as="image" />
+                {
+                    state.rooms.map(rm => (
+                        <link key={rm.id} rel="preload" href={rm.img} as="image" />
+                    ))    
+                }
+            </Helmet>
+
             <Navbar />
             <Hero />
             <Services />

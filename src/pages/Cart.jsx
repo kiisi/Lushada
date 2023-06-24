@@ -10,12 +10,17 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import no_cart_img from '../assets/no-cart-img.jpg'
 import { PaystackButton } from "react-paystack"
+import { Helmet } from 'react-helmet'
 
 
 const Cart = () => {
 
   return (
     <>
+      <Helmet>
+        <title>Lushada Cart</title>
+        <link rel="preload" href={no_cart_img} as="image"/>
+      </Helmet>
       <Navbar />
       <Hero />
       <CartItem />
