@@ -61,9 +61,7 @@ const CartItem = () => {
     },
     publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
     text: "Pay Now",
-    onSuccess: () => {
-      toast.success("Payment Successful")
-    },
+
     onClose: () => console.log("Close"),
   }
 
@@ -142,6 +140,10 @@ const CartItem = () => {
                     className="h-[42px] grid place-items-center px-6 bg-primary text-white rounded-[6px]"
                     text="Book Now"
                     amount={(rm.price + rm.vat) * 100}
+                    onSuccess={ () => {
+                      toast.success("Payment Successful")
+                      dispatch({ type: "REMOVE_FROM_CART", payload: rm.id })
+                    }}
                   />
                 }
               </div>
