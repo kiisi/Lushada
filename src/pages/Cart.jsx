@@ -20,7 +20,7 @@ const Cart = () => {
     <>
       <Helmet>
         <title>Lushada Cart</title>
-        <link rel="preload" href={no_cart_img} as="image"/>
+        <link rel="preload" href={no_cart_img} as="image" />
       </Helmet>
       <Navbar />
       <Hero />
@@ -70,6 +70,14 @@ const CartItem = () => {
 
   return (
     <section className="py-16 max-w-xl w-full mx-auto flex flex-col gap-y-14 px-3 ss:px-6">
+      {
+        state.user === null && state.cart.length !== 0 ?
+          <div className="p-4 bg-white box-shadow text-center text-primary text-[20px] font-semibold">
+            <p>Login into your account to in order to book a room</p>
+          </div>
+          :
+          null
+      }
       {
         state.cart.length === 0 ?
           <figure className="grid place-items-center">
@@ -131,10 +139,10 @@ const CartItem = () => {
                 </Button>
                 {
                   state.user && <PaystackButton {...componentProps}
-                  className="h-[42px] grid place-items-center px-6 bg-primary text-white rounded-[6px]"
-                  text="Book Now"
-                  amount={(rm.price + rm.vat) * 100}
-                />
+                    className="h-[42px] grid place-items-center px-6 bg-primary text-white rounded-[6px]"
+                    text="Book Now"
+                    amount={(rm.price + rm.vat) * 100}
+                  />
                 }
               </div>
             </div>
