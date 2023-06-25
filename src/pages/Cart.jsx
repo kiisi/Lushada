@@ -11,6 +11,7 @@ import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
 import no_cart_img from '../assets/no-cart-img.jpg'
 import { PaystackButton } from "react-paystack"
 import { Helmet } from 'react-helmet'
+import Footer from '../layout/Footer'
 
 
 const Cart = () => {
@@ -24,6 +25,7 @@ const Cart = () => {
       <Navbar />
       <Hero />
       <CartItem />
+      <Footer />
     </>
   )
 }

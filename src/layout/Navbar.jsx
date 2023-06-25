@@ -291,9 +291,9 @@ const Profile = ({ closeAuthPopUpHandler }) => {
                     <h1 className="text-primary text-[30px] font-semibold text-center">Profile</h1>
                 </header>
                 <div className="flex flex-col gap-y-4 pt-5">
-                    <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> badge </span> {state.user.name}</p>
+                    <p className="box-shadow p-2 flex gap-x-3 capitalize items-center"><span className="material-icons text-primary"> badge </span> {state.user.name}</p>
                     <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> email </span> {state.user.email}</p>
-                    <p className="box-shadow p-2 flex gap-x-3 items-center"><span className="material-icons text-primary"> accessibility_new </span> {state.user.gender}</p>
+                    <p className="box-shadow p-2 flex gap-x-3 capitalize items-center"><span className="material-icons text-primary"> accessibility_new </span> {state.user.gender}</p>
                     <Button className="w-full" onClick={submit} loading={loading}>Logout</Button>
                 </div>
             </section>

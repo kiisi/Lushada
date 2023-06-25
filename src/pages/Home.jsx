@@ -7,6 +7,7 @@ import { toast } from 'react-toastify'
 import { Helmet } from 'react-helmet'
 import hero_bg from '../assets/hero-img.jpg'
 import bedroom_bg from '../assets/bedroom-img.jpg'
+import Footer from '../layout/Footer'
 
 const Home = () => {
 
@@ -30,6 +31,7 @@ const Home = () => {
             <Services />
             <RoomTabs />
             <Rooms />
+            <Footer />
         </>
     )
 }
