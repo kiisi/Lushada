@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 import { Link } from 'react-router-dom'
 import Button from '../components/Button'
-import { useState, useEffect, useRef } from 'react'
+import { useState } from 'react'
 import { useAppStateContext } from '../context/AppStateContext'
 import Input from '../components/Input'
 import { base_url_endpoint } from '../utils/endpoints'
@@ -23,7 +23,7 @@ const Navbar = () => {
 
     return (
         <>
-            <nav className="p-3 fixed top-0 left-0 w-full flex z-[888]">
+            <nav className="p-3 absolute top-0 left-0 w-full flex z-[888]">
                 <div className="box-shadow mx-auto flex justify-between items-center w-full max-w-xl
              rounded-[50px] px-5 py-3 bg-white">
                     <div>
@@ -61,15 +61,6 @@ const Login = ({ closeAuthPopUpHandler, openAuthPopUpHandler, dispatch }) => {
     const [password, setPassword] = useState('')
     const [loading, setLoading] = useState(false)
 
-    const popupRef = useRef()
-
-    useEffect(()=>{
-        popupRef.current.focus()
-        document.querySelector("body").classList.add("no-scroll")
-
-        return () => document.querySelector("body").classList.remove("no-scroll")
-    },[])
-
     async function submit(e) {
 
         e.preventDefault()
@@ -106,7 +97,7 @@ const Login = ({ closeAuthPopUpHandler, openAuthPopUpHandler, dispatch }) => {
     }
 
     return (
-        <main ref={popupRef} className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center overflow-y-auto py-8 px-3 inset-0">
+        <main className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center overflow-y-auto py-8 px-3 inset-0">
             <section className="w-full max-w-[400px] rounded-[6px] bg-white p-4 auth-popup-animation">
                 <header>
                     <div className="flex justify-end">
@@ -141,16 +132,7 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [gender, setGender] = useState(null)
     const [loading, setLoading] = useState(false)
-    console.log(gender)
 
-    const popupRef = useRef()
-
-    useEffect(()=>{
-        popupRef.current.focus()
-        document.querySelector("body").classList.add("no-scroll")
-
-        return () => document.querySelector("body").classList.remove("no-scroll")
-    },[])
 
     async function submit(e) {
 
@@ -189,7 +171,7 @@ const Signup = ({ closeAuthPopUpHandler, openAuthPopUpHandler }) => {
     }
 
     return (
-        <main ref={popupRef} tabIndex="-1" className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center overflow-y-auto py-8 px-3 inset-0">
+        <main tabIndex="-1" className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center overflow-y-auto py-8 px-3 inset-0">
             <section className="w-full max-w-[400px] rounded-[6px] bg-white p-4 auth-popup-animation">
                 <header>
                     <div className="flex justify-end">
@@ -240,15 +222,6 @@ const Profile = ({ closeAuthPopUpHandler }) => {
     const { state, dispatch } = useAppStateContext()
     const [loading, setLoading] = useState(false)
 
-    const popupRef = useRef()
-
-    useEffect(()=>{
-        popupRef.current.focus()
-        document.querySelector("body").classList.add("no-scroll")
-
-        return () => document.querySelector("body").classList.remove("no-scroll")
-    },[])
-
     const submit = async () => {
 
         setLoading(true)
@@ -282,7 +255,7 @@ const Profile = ({ closeAuthPopUpHandler }) => {
     console.log(state)
 
     return (
-        <main ref={popupRef} className="min-h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center overflow-y-auto py-8 px-3 inset-0">
+        <main className="h-[100vh] w-full bg-[#000000bf] fixed top-0 left-0 z-[999] grid place-items-center overflow-y-auto py-8 px-3 inset-0">
             <section className="w-full max-w-[400px] rounded-[6px] bg-white p-4 auth-popup-animation">
                 <header>
                     <div className="flex justify-end">
